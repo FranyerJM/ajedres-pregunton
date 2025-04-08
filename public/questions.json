@@ -1,0 +1,92 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "¿Cuánto es 15 + 27?",
+      "options": [
+        { "id": "A", "value": 42 },
+        { "id": "B", "value": 40 },
+        { "id": "C", "value": 43 },
+        { "id": "D", "value": 41 }
+      ],
+      "correctAnswer": 42
+    },
+    {
+      "id": 2,
+      "question": "¿Cuánto es 8 × 7?",
+      "options": [
+        { "id": "A", "value": 54 },
+        { "id": "B", "value": 56 },
+        { "id": "C", "value": 58 },
+        { "id": "D", "value": 52 }
+      ],
+      "correctAnswer": 56
+    },
+    {
+      "id": 3,
+      "question": "¿Cuánto es 45 - 18?",
+      "options": [
+        { "id": "A", "value": 25 },
+        { "id": "B", "value": 26 },
+        { "id": "C", "value": 27 },
+        { "id": "D", "value": 28 }
+      ],
+      "correctAnswer": 27
+    },
+    {
+      "id": 4,
+      "question": "¿Cuánto es 12 × 12?",
+      "options": [
+        { "id": "A", "value": 144 },
+        { "id": "B", "value": 124 },
+        { "id": "C", "value": 134 },
+        { "id": "D", "value": 154 }
+      ],
+      "correctAnswer": 144
+    },
+    {
+      "id": 5,
+      "question": "¿Cuánto es 72 ÷ 9?",
+      "options": [
+        { "id": "A", "value": 9 },
+        { "id": "B", "value": 8 },
+        { "id": "C", "value": 7 },
+        { "id": "D", "value": 6 }
+      ],
+      "correctAnswer": 8
+    },
+    {
+      "id": 6,
+      "question": "¿Cuánto es 5² + 3²?",
+      "options": [
+        { "id": "A", "value": 25 },
+        { "id": "B", "value": 34 },
+        { "id": "C", "value": 64 },
+        { "id": "D", "value": 34 }
+      ],
+      "correctAnswer": 34
+    },
+    {
+      "id": 7,
+      "question": "¿Cuál es la raíz cuadrada de 81?",
+      "options": [
+        { "id": "A", "value": 8 },
+        { "id": "B", "value": 9 },
+        { "id": "C", "value": 10 },
+        { "id": "D", "value": 7 }
+      ],
+      "correctAnswer": 9
+    },
+    {
+      "id": 8,
+      "question": "¿Cuánto es 18 + 27?",
+      "options": [
+        { "id": "A", "value": 45 },
+        { "id": "B", "value": 44 },
+        { "id": "C", "value": 46 },
+        { "id": "D", "value": 43 }
+      ],
+      "correctAnswer": 45
+    }
+  ]
+}
