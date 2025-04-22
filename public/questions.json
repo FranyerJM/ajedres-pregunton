@@ -2,91 +2,159 @@
   "questions": [
     {
       "id": 1,
-      "question": "¿Cuánto es 15 + 27?",
+      "question": "¿Cuál de las siguientes estructuras es un anillo conmutativo con unidad?",
       "options": [
-        { "id": "A", "value": 42 },
-        { "id": "B", "value": 40 },
-        { "id": "C", "value": 43 },
-        { "id": "D", "value": 41 }
+        { "id": "A", "value": "(Z, +, ·)" },
+        { "id": "B", "value": "(Q*, ·)" },
+        { "id": "C", "value": "(N, +, ·)" },
+        { "id": "D", "value": "(R, +)" }
       ],
-      "correctAnswer": 42
+      "correctAnswer": "A",
+      "difficulty": "medium",
+      "feedback": "Z con operaciones de suma y multiplicación forma un anillo conmutativo con unidad."
     },
     {
       "id": 2,
-      "question": "¿Cuánto es 8 × 7?",
+      "question": "Sea f: G→H un homomorfismo de grupos, ¿qué indica el Teorema de Isomorfismo de Grupos?",
       "options": [
-        { "id": "A", "value": 54 },
-        { "id": "B", "value": 56 },
-        { "id": "C", "value": 58 },
-        { "id": "D", "value": 52 }
+        { "id": "A", "value": "G/ker(f) ≅ im(f)" },
+        { "id": "B", "value": "G ≅ H" },
+        { "id": "C", "value": "ker(f)=e" },
+        { "id": "D", "value": "f es inyectivo" }
       ],
-      "correctAnswer": 56
+      "correctAnswer": "A",
+      "difficulty": "hard",
+      "feedback": "El primer teorema de isomorfismo establece G/ker(f) ≅ im(f)."
     },
     {
       "id": 3,
-      "question": "¿Cuánto es 45 - 18?",
+      "question": "¿Cuál es la definición de un grupo?",
       "options": [
-        { "id": "A", "value": 25 },
-        { "id": "B", "value": 26 },
-        { "id": "C", "value": 27 },
-        { "id": "D", "value": 28 }
+        { "id": "A", "value": "Conjunto con una operación asociativa" },
+        { "id": "B", "value": "Conjunto con una operación asociativa, elemento neutro e inversos" },
+        { "id": "C", "value": "Conjunto con una operación conmutativa" },
+        { "id": "D", "value": "Conjunto con dos operaciones que cumplen distributividad" }
       ],
-      "correctAnswer": 27
+      "correctAnswer": "B",
+      "difficulty": "easy",
+      "feedback": "Un grupo es un conjunto con una operación binaria que es asociativa, tiene elemento neutro y todo elemento tiene inverso."
     },
     {
       "id": 4,
-      "question": "¿Cuánto es 12 × 12?",
+      "question": "¿Qué es un cuerpo en álgebra?",
       "options": [
-        { "id": "A", "value": 144 },
-        { "id": "B", "value": 124 },
-        { "id": "C", "value": 134 },
-        { "id": "D", "value": 154 }
+        { "id": "A", "value": "Un anillo donde todo elemento no nulo tiene inverso multiplicativo" },
+        { "id": "B", "value": "Un conjunto con una operación asociativa" },
+        { "id": "C", "value": "Un grupo abeliano" },
+        { "id": "D", "value": "Un anillo sin divisores de cero" }
       ],
-      "correctAnswer": 144
+      "correctAnswer": "A",
+      "difficulty": "medium",
+      "feedback": "Un cuerpo es un anillo conmutativo con unidad donde todo elemento no nulo tiene inverso multiplicativo."
     },
     {
       "id": 5,
-      "question": "¿Cuánto es 72 ÷ 9?",
+      "question": "¿Cuál de los siguientes NO es un grupo?",
       "options": [
-        { "id": "A", "value": 9 },
-        { "id": "B", "value": 8 },
-        { "id": "C", "value": 7 },
-        { "id": "D", "value": 6 }
+        { "id": "A", "value": "(Z, +)" },
+        { "id": "B", "value": "(Q*, ·)" },
+        { "id": "C", "value": "(Z, ·)" },
+        { "id": "D", "value": "(R*, ·)" }
       ],
-      "correctAnswer": 8
+      "correctAnswer": "C",
+      "difficulty": "medium",
+      "feedback": "(Z, ·) no es un grupo porque los elementos no tienen inversos multiplicativos (excepto 1 y -1)."
     },
     {
       "id": 6,
-      "question": "¿Cuánto es 5² + 3²?",
+      "question": "¿Qué es un homomorfismo entre grupos (G,*) y (H,•)?",
       "options": [
-        { "id": "A", "value": 25 },
-        { "id": "B", "value": 34 },
-        { "id": "C", "value": 64 },
-        { "id": "D", "value": 34 }
+        { "id": "A", "value": "Una función f:G→H tal que f(a*b)=f(a)•f(b)" },
+        { "id": "B", "value": "Una función biyectiva f:G→H" },
+        { "id": "C", "value": "Una función f:G→H tal que f(a*b)=f(b)•f(a)" },
+        { "id": "D", "value": "Una función inyectiva f:G→H" }
       ],
-      "correctAnswer": 34
+      "correctAnswer": "A",
+      "difficulty": "medium",
+      "feedback": "Un homomorfismo es una función que preserva la estructura algebraica: f(a*b)=f(a)•f(b)."
     },
     {
       "id": 7,
-      "question": "¿Cuál es la raíz cuadrada de 81?",
+      "question": "¿Qué es un ideal en un anillo R?",
       "options": [
-        { "id": "A", "value": 8 },
-        { "id": "B", "value": 9 },
-        { "id": "C", "value": 10 },
-        { "id": "D", "value": 7 }
+        { "id": "A", "value": "Un subconjunto cerrado bajo la suma" },
+        { "id": "B", "value": "Un subconjunto I tal que para todo a∈I y r∈R, ar∈I y ra∈I" },
+        { "id": "C", "value": "Un subconjunto que contiene al elemento neutro" },
+        { "id": "D", "value": "Un subconjunto que contiene todos los elementos invertibles" }
       ],
-      "correctAnswer": 9
+      "correctAnswer": "B",
+      "difficulty": "hard",
+      "feedback": "Un ideal es un subconjunto I que es un subgrupo aditivo y absorbe productos: para todo a∈I y r∈R, ar∈I y ra∈I."
     },
     {
       "id": 8,
-      "question": "¿Cuánto es 18 + 27?",
+      "question": "¿Cuál es el orden del grupo cíclico Z₄?",
       "options": [
-        { "id": "A", "value": 45 },
-        { "id": "B", "value": 44 },
-        { "id": "C", "value": 46 },
-        { "id": "D", "value": 43 }
+        { "id": "A", "value": "2" },
+        { "id": "B", "value": "3" },
+        { "id": "C", "value": "4" },
+        { "id": "D", "value": "Infinito" }
       ],
-      "correctAnswer": 45
+      "correctAnswer": "C",
+      "difficulty": "easy",
+      "feedback": "El grupo cíclico Z₄ tiene orden 4, ya que contiene exactamente 4 elementos: {0,1,2,3}."
+    },
+    {
+      "id": 9,
+      "question": "¿Qué caracteriza a un dominio de integridad?",
+      "options": [
+        { "id": "A", "value": "Es un anillo conmutativo con unidad" },
+        { "id": "B", "value": "Es un anillo donde todo elemento tiene inverso" },
+        { "id": "C", "value": "Es un anillo conmutativo con unidad sin divisores de cero" },
+        { "id": "D", "value": "Es un anillo donde todo ideal es principal" }
+      ],
+      "correctAnswer": "C",
+      "difficulty": "medium",
+      "feedback": "Un dominio de integridad es un anillo conmutativo con unidad donde no hay divisores de cero (si ab=0, entonces a=0 o b=0)."
+    },
+    {
+      "id": 10,
+      "question": "¿Cuál es el núcleo (kernel) de un homomorfismo de grupos f:G→H?",
+      "options": [
+        { "id": "A", "value": "El conjunto {g∈G | f(g)=e_H}" },
+        { "id": "B", "value": "El conjunto {h∈H | h=f(g) para algún g∈G}" },
+        { "id": "C", "value": "El conjunto {g∈G | f(g)=g}" },
+        { "id": "D", "value": "El conjunto {g∈G | f(g)≠e_H}" }
+      ],
+      "correctAnswer": "A",
+      "difficulty": "medium",
+      "feedback": "El núcleo de un homomorfismo f:G→H es el conjunto de elementos de G que se mapean al elemento identidad de H."
+    },
+    {
+      "id": 11,
+      "question": "¿Qué es un subgrupo normal?",
+      "options": [
+        { "id": "A", "value": "Un subgrupo que contiene solo elementos de orden finito" },
+        { "id": "B", "value": "Un subgrupo H de G tal que gH=Hg para todo g∈G" },
+        { "id": "C", "value": "Un subgrupo generado por un solo elemento" },
+        { "id": "D", "value": "Un subgrupo de índice finito" }
+      ],
+      "correctAnswer": "B",
+      "difficulty": "hard",
+      "feedback": "Un subgrupo normal H de G es aquel donde los cosets izquierdos y derechos coinciden: gH=Hg para todo g∈G."
+    },
+    {
+      "id": 12,
+      "question": "¿Cuál de los siguientes es un anillo pero no un dominio de integridad?",
+      "options": [
+        { "id": "A", "value": "Z (enteros)" },
+        { "id": "B", "value": "Q (racionales)" },
+        { "id": "C", "value": "Z₆ (enteros módulo 6)" },
+        { "id": "D", "value": "R[x] (polinomios con coeficientes reales)" }
+      ],
+      "correctAnswer": "C",
+      "difficulty": "medium",
+      "feedback": "Z₆ tiene divisores de cero: 2×3=0 en Z₆, pero ni 2 ni 3 son cero, por lo que no es un dominio de integridad."
     }
   ]
 }

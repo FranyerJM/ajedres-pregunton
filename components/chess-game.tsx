@@ -10,51 +10,169 @@ import SettingsPanel from "./settings-panel"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-// Preguntas predeterminadas en caso de que falle la carga del JSON
+// Actualizar las preguntas predeterminadas con preguntas de estructura algebraica
 const DEFAULT_QUESTIONS = [
   {
     id: 1,
-    question: "¿Cuánto es 15 + 27?",
+    question: "¿Cuál de las siguientes estructuras es un anillo conmutativo con unidad?",
     options: [
-      { id: "A", value: 42 },
-      { id: "B", value: 40 },
-      { id: "C", value: 43 },
-      { id: "D", value: 41 },
+      { id: "A", value: "(Z, +, ·)" },
+      { id: "B", value: "(Q*, ·)" },
+      { id: "C", value: "(N, +, ·)" },
+      { id: "D", value: "(R, +)" },
     ],
-    correctAnswer: 42,
+    correctAnswer: "A",
+    difficulty: "medium",
+    feedback: "Z con operaciones de suma y multiplicación forma un anillo conmutativo con unidad.",
   },
   {
     id: 2,
-    question: "¿Cuánto es 8 × 7?",
+    question: "Sea f: G→H un homomorfismo de grupos, ¿qué indica el Teorema de Isomorfismo de Grupos?",
     options: [
-      { id: "A", value: 54 },
-      { id: "B", value: 56 },
-      { id: "C", value: 58 },
-      { id: "D", value: 52 },
+      { id: "A", value: "G/ker(f) ≅ im(f)" },
+      { id: "B", value: "G ≅ H" },
+      { id: "C", value: "ker(f)=e" },
+      { id: "D", value: "f es inyectivo" },
     ],
-    correctAnswer: 56,
+    correctAnswer: "A",
+    difficulty: "hard",
+    feedback: "El primer teorema de isomorfismo establece G/ker(f) ≅ im(f).",
   },
   {
     id: 3,
-    question: "¿Cuánto es 45 - 18?",
+    question: "¿Cuál es la definición de un grupo?",
     options: [
-      { id: "A", value: 25 },
-      { id: "B", value: 26 },
-      { id: "C", value: 27 },
-      { id: "D", value: 28 },
+      { id: "A", value: "Conjunto con una operación asociativa" },
+      { id: "B", value: "Conjunto con una operación asociativa, elemento neutro e inversos" },
+      { id: "C", value: "Conjunto con una operación conmutativa" },
+      { id: "D", value: "Conjunto con dos operaciones que cumplen distributividad" },
     ],
-    correctAnswer: 27,
+    correctAnswer: "B",
+    difficulty: "easy",
+    feedback:
+      "Un grupo es un conjunto con una operación binaria que es asociativa, tiene elemento neutro y todo elemento tiene inverso.",
   },
   {
     id: 4,
-    question: "¿Cuánto es 12 × 12?",
+    question: "¿Qué es un cuerpo en álgebra?",
     options: [
-      { id: "A", value: 144 },
-      { id: "B", value: 124 },
-      { id: "C", value: 134 },
-      { id: "D", value: 154 },
+      { id: "A", value: "Un anillo donde todo elemento no nulo tiene inverso multiplicativo" },
+      { id: "B", value: "Un conjunto con una operación asociativa" },
+      { id: "C", value: "Un grupo abeliano" },
+      { id: "D", value: "Un anillo sin divisores de cero" },
     ],
-    correctAnswer: 144,
+    correctAnswer: "A",
+    difficulty: "medium",
+    feedback: "Un cuerpo es un anillo conmutativo con unidad donde todo elemento no nulo tiene inverso multiplicativo.",
+  },
+  {
+    id: 5,
+    question: "¿Cuál de los siguientes NO es un grupo?",
+    options: [
+      { id: "A", value: "(Z, +)" },
+      { id: "B", value: "(Q*, ·)" },
+      { id: "C", value: "(Z, ·)" },
+      { id: "D", value: "(R*, ·)" },
+    ],
+    correctAnswer: "C",
+    difficulty: "medium",
+    feedback: "(Z, ·) no es un grupo porque los elementos no tienen inversos multiplicativos (excepto 1 y -1).",
+  },
+  {
+    id: 6,
+    question: "¿Qué es un homomorfismo entre grupos (G,*) y (H,•)?",
+    options: [
+      { id: "A", value: "Una función f:G→H tal que f(a*b)=f(a)•f(b)" },
+      { id: "B", value: "Una función biyectiva f:G→H" },
+      { id: "C", value: "Una función f:G→H tal que f(a*b)=f(b)•f(a)" },
+      { id: "D", value: "Una función inyectiva f:G→H" },
+    ],
+    correctAnswer: "A",
+    difficulty: "medium",
+    feedback: "Un homomorfismo es una función que preserva la estructura algebraica: f(a*b)=f(a)•f(b).",
+  },
+  {
+    id: 7,
+    question: "¿Qué es un ideal en un anillo R?",
+    options: [
+      { id: "A", value: "Un subconjunto cerrado bajo la suma" },
+      { id: "B", value: "Un subconjunto I tal que para todo a∈I y r∈R, ar∈I y ra∈I" },
+      { id: "C", value: "Un subconjunto que contiene al elemento neutro" },
+      { id: "D", value: "Un subconjunto que contiene todos los elementos invertibles" },
+    ],
+    correctAnswer: "B",
+    difficulty: "hard",
+    feedback:
+      "Un ideal es un subconjunto I que es un subgrupo aditivo y absorbe productos: para todo a∈I y r∈R, ar∈I y ra∈I.",
+  },
+  {
+    id: 8,
+    question: "¿Cuál es el orden del grupo cíclico Z₄?",
+    options: [
+      { id: "A", value: "2" },
+      { id: "B", value: "3" },
+      { id: "C", value: "4" },
+      { id: "D", value: "Infinito" },
+    ],
+    correctAnswer: "C",
+    difficulty: "easy",
+    feedback: "El grupo cíclico Z₄ tiene orden 4, ya que contiene exactamente 4 elementos: {0,1,2,3}.",
+  },
+  {
+    id: 9,
+    question: "¿Qué caracteriza a un dominio de integridad?",
+    options: [
+      { id: "A", value: "Es un anillo conmutativo con unidad" },
+      { id: "B", value: "Es un anillo donde todo elemento tiene inverso" },
+      { id: "C", value: "Es un anillo conmutativo con unidad sin divisores de cero" },
+      { id: "D", value: "Es un anillo donde todo ideal es principal" },
+    ],
+    correctAnswer: "C",
+    difficulty: "medium",
+    feedback:
+      "Un dominio de integridad es un anillo conmutativo con unidad donde no hay divisores de cero (si ab=0, entonces a=0 o b=0).",
+  },
+  {
+    id: 10,
+    question: "¿Cuál es el núcleo (kernel) de un homomorfismo de grupos f:G→H?",
+    options: [
+      { id: "A", value: "El conjunto {g∈G | f(g)=e_H}" },
+      { id: "B", value: "El conjunto {h∈H | h=f(g) para algún g∈G}" },
+      { id: "C", value: "El conjunto {g∈G | f(g)=g}" },
+      { id: "D", value: "El conjunto {g∈G | f(g)≠e_H}" },
+    ],
+    correctAnswer: "A",
+    difficulty: "medium",
+    feedback:
+      "El núcleo de un homomorfismo f:G→H es el conjunto de elementos de G que se mapean al elemento identidad de H.",
+  },
+  {
+    id: 11,
+    question: "¿Qué es un subgrupo normal?",
+    options: [
+      { id: "A", value: "Un subgrupo que contiene solo elementos de orden finito" },
+      { id: "B", value: "Un subgrupo H de G tal que gH=Hg para todo g∈G" },
+      { id: "C", value: "Un subgrupo generado por un solo elemento" },
+      { id: "D", value: "Un subgrupo de índice finito" },
+    ],
+    correctAnswer: "B",
+    difficulty: "hard",
+    feedback:
+      "Un subgrupo normal H de G es aquel donde los cosets izquierdos y derechos coinciden: gH=Hg para todo g∈G.",
+  },
+  {
+    id: 12,
+    question: "¿Cuál de los siguientes es un anillo pero no un dominio de integridad?",
+    options: [
+      { id: "A", value: "Z (enteros)" },
+      { id: "B", value: "Q (racionales)" },
+      { id: "C", value: "Z₆ (enteros módulo 6)" },
+      { id: "D", value: "R[x] (polinomios con coeficientes reales)" },
+    ],
+    correctAnswer: "C",
+    difficulty: "medium",
+    feedback:
+      "Z₆ tiene divisores de cero: 2×3=0 en Z₆, pero ni 2 ni 3 son cero, por lo que no es un dominio de integridad.",
   },
 ]
 
@@ -102,7 +220,11 @@ export default function ChessGame() {
 
   // Estado para el modal de fin de juego
   const [gameOver, setGameOver] = useState(false)
-  const [gameResult, setGameResult] = useState("")
+  const [gameResult, setGameResult] = useState({
+    title: "",
+    message: "",
+    winner: "", // "w", "b", o "draw"
+  })
 
   // Referencias para el temporizador
   const timerRef = useRef(null)
@@ -223,10 +345,13 @@ export default function ChessGame() {
     if (questions.length === 0) return null
 
     // Filtrar preguntas según la dificultad seleccionada
-    const filteredQuestions = questions
+    let filteredQuestions = [...questions]
     if (frequencySettings.difficulty !== "all") {
-      // Aquí se implementaría la lógica para filtrar por dificultad
-      // Por ahora, usamos todas las preguntas
+      filteredQuestions = questions.filter((q) => q.difficulty === frequencySettings.difficulty)
+      if (filteredQuestions.length === 0) {
+        // Si no hay preguntas de la dificultad seleccionada, usar todas
+        filteredQuestions = [...questions]
+      }
     }
 
     const randomIndex = Math.floor(Math.random() * filteredQuestions.length)
@@ -235,7 +360,8 @@ export default function ChessGame() {
     return {
       question: question.question,
       options: question.options,
-      answer: question.correctAnswer,
+      answer: question.correctAnswer, // Ahora esto es el ID (A, B, C, D)
+      feedback: question.feedback, // Añadir retroalimentación
     }
   }
 
@@ -293,6 +419,9 @@ export default function ChessGame() {
       // Crear una copia del juego para probar el movimiento
       const gameCopy = new Chess(game.fen())
 
+      // Guardar el estado FEN antes del movimiento
+      const previousFen = game.fen()
+
       // Intentar hacer el movimiento
       const move = gameCopy.move({
         from: sourceSquare,
@@ -302,6 +431,9 @@ export default function ChessGame() {
 
       // Si el movimiento no es válido
       if (move === null) return false
+
+      // Añadir el FEN anterior al objeto de movimiento para poder revertirlo si es necesario
+      move.fen = previousFen
 
       // Verificar si el movimiento fue una captura
       if (move.captured) {
@@ -329,24 +461,44 @@ export default function ChessGame() {
 
       // Verificar si el juego ha terminado
       if (gameCopy.isGameOver()) {
-        let result = ""
         if (gameCopy.isCheckmate()) {
           // Si es jaque mate, ganó el jugador que acaba de mover
-          result = `¡Partida finalizada! ${move.color === "w" ? "Blancas" : "Negras"} ganan por jaque mate.`
+          const ganador = move.color === "w" ? "Blancas" : "Negras"
+          const perdedor = move.color === "w" ? "Negras" : "Blancas"
+
+          setGameResult({
+            title: `¡${ganador} ganan la partida!`,
+            message: `Victoria por jaque mate. ${perdedor} no pueden evitar el jaque.`,
+            winner: move.color,
+          })
+
+          console.log(`Fin de partida: ${ganador} ganan por jaque mate`)
         } else if (gameCopy.isDraw()) {
-          // Determinar el tipo de tablas
+          // Determinar el tipo específico de tablas
+          const titulo = "¡Partida finalizada en tablas!"
+          let razon = ""
+
           if (gameCopy.isStalemate()) {
-            result = "¡Partida finalizada! Tablas por ahogado."
+            razon = `Tablas por ahogado. El jugador de ${game.turn() === "w" ? "blancas" : "negras"} no tiene movimientos legales pero no está en jaque.`
+            console.log("Fin de partida: Tablas por ahogado")
           } else if (gameCopy.isThreefoldRepetition()) {
-            result = "¡Partida finalizada! Tablas por triple repetición."
+            razon = "Tablas por triple repetición. La misma posición ha ocurrido tres veces."
+            console.log("Fin de partida: Tablas por triple repetición")
           } else if (gameCopy.isInsufficientMaterial()) {
-            result = "¡Partida finalizada! Tablas por material insuficiente."
+            razon = "Tablas por material insuficiente. No hay suficientes piezas para dar jaque mate."
+            console.log("Fin de partida: Tablas por material insuficiente")
           } else {
-            result = "¡Partida finalizada! Tablas."
+            razon = "Tablas por regla de 50 movimientos. Han pasado 50 movimientos sin capturas ni movimientos de peón."
+            console.log("Fin de partida: Tablas por regla de 50 movimientos")
           }
+
+          setGameResult({
+            title: titulo,
+            message: razon,
+            winner: "draw",
+          })
         }
 
-        setGameResult(result)
         setGameOver(true)
 
         // Detener el temporizador si está activo
@@ -401,56 +553,57 @@ export default function ChessGame() {
           setCapturedPieces(lastMoveInfo.capturedPieces)
         }
 
-        // 3. Reconstruir el juego hasta el movimiento anterior
-        const prevMoveHistory = lastMoveInfo.moveHistory.slice(0, -1)
-        const newGame = new Chess()
+        // 3. Revertir completamente el movimiento creando un nuevo juego con el estado anterior
+        // Esto es antes de que se realizara el movimiento
+        const previousFen = lastMove.fen || game.fen() // Usar el FEN anterior si está disponible
+        const gameWithRevertedMove = new Chess(previousFen)
 
-        prevMoveHistory.forEach((move) => {
-          newGame.move({
-            from: move.from,
-            to: move.to,
-            promotion: move.promotion,
-          })
-        })
-
-        // 4. Determinar el turno actual y el turno opuesto
-        const currentTurn = newGame.turn()
+        // 4. Cambiar el turno al jugador contrario
+        const currentTurn = gameWithRevertedMove.turn()
         const oppositeTurn = currentTurn === "w" ? "b" : "w"
+        const fenWithChangedTurn = changeTurnInFEN(previousFen, oppositeTurn)
+        const gameWithChangedTurn = new Chess(fenWithChangedTurn)
 
-        // 5. Modificar el FEN para cambiar el turno al oponente
-        const newFen = changeTurnInFEN(newGame.fen(), oppositeTurn)
+        // Actualizar el estado del juego para revertir el movimiento y cambiar el turno
+        setGame(gameWithChangedTurn)
+        setPosition(fenWithChangedTurn)
 
-        // 6. Crear un nuevo juego con el FEN modificado
-        const gameWithOppositeTurn = new Chess(newFen)
-
-        // 7. Actualizar todos los estados
-        setGame(gameWithOppositeTurn)
-        setPosition(newFen)
-        setMoveHistory(prevMoveHistory)
+        // Restaurar el historial de movimientos anterior
+        const previousMoveHistory = moveHistory.slice(0, -1)
+        setMoveHistory(previousMoveHistory)
 
         // Mostrar mensaje de feedback para respuesta incorrecta si está habilitado
         if (frequencySettings.showFeedback) {
-          setFeedbackMessage(`Respuesta incorrecta, turno de ${oppositeTurn === "w" ? "blancas" : "negras"}`)
+          setFeedbackMessage(
+            `Respuesta incorrecta, movimiento revertido. Turno de ${oppositeTurn === "w" ? "blancas" : "negras"}`,
+          )
           setShowFeedback(true)
         }
 
-        console.log(`Respuesta incorrecta. Turno cambiado de ${currentTurn} a ${oppositeTurn}`)
+        console.log(
+          `Respuesta incorrecta. Movimiento revertido. Turno cambiado a ${oppositeTurn === "w" ? "blancas" : "negras"}`,
+        )
       } catch (error) {
         console.error("Error al manejar respuesta incorrecta:", error)
       }
     } else {
       // Si la respuesta es correcta o no se pierde el turno, el turno sigue siendo del jugador que respondió
       if (frequencySettings.showFeedback) {
-        setFeedbackMessage("Respuesta correcta, tu turno se mantiene")
+        // Mostrar retroalimentación específica de la pregunta si está disponible
+        const feedbackText = currentQuestion.feedback
+          ? `Respuesta correcta: ${currentQuestion.feedback}`
+          : "Respuesta correcta, tu turno se mantiene"
+
+        setFeedbackMessage(feedbackText)
         setShowFeedback(true)
       }
     }
 
-    // Ocultar el mensaje después de 3 segundos si está habilitado
+    // Ocultar el mensaje después de 5 segundos si está habilitado (aumentado de 3 a 5 para dar más tiempo de lectura)
     if (frequencySettings.showFeedback) {
       setTimeout(() => {
         setShowFeedback(false)
-      }, 3000)
+      }, 5000)
     }
 
     setShowQuestion(false)
@@ -458,13 +611,21 @@ export default function ChessGame() {
     setLastMoveInfo(null)
   }
 
-  // Agregar una nueva pregunta
+  // Actualizar la función handleAddQuestion para manejar valores de texto
   const addQuestion = (newQuestion) => {
     // Actualizar el estado local
-    setQuestions([...questions, newQuestion])
+    setQuestions((prevQuestions) => [...prevQuestions, newQuestion])
 
     // En una aplicación real, aquí se guardaría en el servidor
     console.log("Nueva pregunta agregada:", newQuestion)
+  }
+
+  // Función para agregar múltiples preguntas a la vez
+  const addMultipleQuestions = (newQuestions) => {
+    if (newQuestions && newQuestions.length > 0) {
+      setQuestions((prevQuestions) => [...prevQuestions, ...newQuestions])
+      console.log(`${newQuestions.length} preguntas agregadas`)
+    }
   }
 
   // Eliminar una pregunta
@@ -516,7 +677,11 @@ export default function ChessGame() {
     setMoveCount(0)
     setCapturedPieces({ w: [], b: [] })
     setGameOver(false)
-    setGameResult("")
+    setGameResult({
+      title: "",
+      message: "",
+      winner: "",
+    })
 
     // Reiniciar el temporizador si está en modo temporizador
     if (frequencySettings.mode === "timer" && timerRef.current) {
@@ -526,6 +691,121 @@ export default function ChessGame() {
       // El temporizador se reiniciará automáticamente por el efecto
     }
   }
+
+  // Vamos a añadir una función auxiliar para probar diferentes finales de partida
+  // Esto nos permitirá verificar que todos los mensajes se muestren correctamente
+  // Añadir esta función después de la función resetGame:
+
+  // Función para probar diferentes finales de partida (solo para desarrollo)
+  const testEndgame = (endgameType) => {
+    let testGame
+    let testResult = {
+      title: "",
+      message: "",
+      winner: "",
+    }
+
+    switch (endgameType) {
+      case "checkmate-white":
+        // Jaque mate en 2 movimientos (Fool's Mate)
+        testGame = new Chess()
+        testGame.move("f3")
+        testGame.move("e5")
+        testGame.move("g4")
+        testGame.move("Qh4")
+
+        testResult = {
+          title: "¡Negras ganan la partida!",
+          message: "Victoria por jaque mate. Blancas no pueden evitar el jaque.",
+          winner: "b",
+        }
+        break
+
+      case "checkmate-black":
+        // Jaque mate en 4 movimientos (Scholar's Mate)
+        testGame = new Chess()
+        testGame.move("e4")
+        testGame.move("e5")
+        testGame.move("Qh5")
+        testGame.move("Nc6")
+        testGame.move("Bc4")
+        testGame.move("Nf6")
+        testGame.move("Qxf7")
+
+        testResult = {
+          title: "¡Blancas ganan la partida!",
+          message: "Victoria por jaque mate. Negras no pueden evitar el jaque.",
+          winner: "w",
+        }
+        break
+
+      case "stalemate":
+        // Ahogado
+        testGame = new Chess("8/8/8/8/8/5K2/7Q/7k w - - 0 1")
+        testGame.move("Qh3")
+
+        testResult = {
+          title: "¡Partida finalizada en tablas!",
+          message: "Tablas por ahogado. El jugador de negras no tiene movimientos legales pero no está en jaque.",
+          winner: "draw",
+        }
+        break
+
+      case "insufficient":
+        // Material insuficiente
+        testGame = new Chess("8/8/8/8/8/5K2/8/7k w - - 0 1")
+
+        testResult = {
+          title: "¡Partida finalizada en tablas!",
+          message: "Tablas por material insuficiente. No hay suficientes piezas para dar jaque mate.",
+          winner: "draw",
+        }
+        break
+
+      case "threefold":
+        // Simulación de triple repetición
+        testGame = new Chess()
+        // Movimientos que llevan a una repetición
+        testGame.move("Nf3")
+        testGame.move("Nf6")
+        testGame.move("Ng1")
+        testGame.move("Ng8")
+        testGame.move("Nf3")
+        testGame.move("Nf6")
+        testGame.move("Ng1")
+        testGame.move("Ng8")
+
+        testResult = {
+          title: "¡Partida finalizada en tablas!",
+          message: "Tablas por triple repetición. La misma posición ha ocurrido tres veces.",
+          winner: "draw",
+        }
+        break
+
+      default:
+        return // No hacer nada si el tipo no es válido
+    }
+
+    // Actualizar el estado del juego
+    setGame(testGame)
+    setPosition(testGame.fen())
+    setGameResult(testResult)
+    setGameOver(true)
+
+    // Detener el temporizador si está activo
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+      setTimerActive(false)
+    }
+  }
+
+  // Ahora, para facilitar las pruebas, vamos a añadir botones de prueba
+  // que solo se mostrarán en modo desarrollo
+  // Añadir este código justo antes del return final:
+
+  // Estado para mostrar/ocultar los botones de prueba
+  const [showTestButtons, setShowTestButtons] = useState(false)
 
   // Añadir un useEffect para inicializar las variables CSS al cargar el componente
   useEffect(() => {
@@ -585,6 +865,7 @@ export default function ChessGame() {
           <SettingsPanel
             onClose={() => setShowSettings(false)}
             onAddQuestion={addQuestion}
+            onAddMultipleQuestions={addMultipleQuestions}
             onDeleteQuestion={deleteQuestion}
             onUpdateColors={updateBoardColors}
             onUpdateFrequencySettings={updateFrequencySettings}
@@ -611,15 +892,66 @@ export default function ChessGame() {
       {gameOver && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <Card className="w-full max-w-md">
-            <CardHeader style={{ backgroundColor: "var(--dark-square)", color: "white" }}>
-              <CardTitle className="text-xl text-center">Fin de la Partida</CardTitle>
+            <CardHeader
+              style={{
+                backgroundColor:
+                  gameResult.winner === "w" ? "white" : gameResult.winner === "b" ? "black" : "var(--dark-square)",
+                color: gameResult.winner === "w" ? "black" : "white",
+              }}
+              className="border-b-2 border-gray-300"
+            >
+              <CardTitle className="text-2xl text-center font-bold">{gameResult.title}</CardTitle>
             </CardHeader>
             <CardContent className="p-6" style={{ backgroundColor: "var(--light-square)" }}>
-              <p className="text-xl font-bold mb-6 text-center" style={{ color: "var(--dark-square)" }}>
-                {gameResult}
-              </p>
+              <div className="flex flex-col items-center">
+                {gameResult.winner === "w" || gameResult.winner === "b" ? (
+                  <div className="mb-6 flex flex-col items-center">
+                    <div
+                      className={`w-20 h-20 rounded-full ${
+                        gameResult.winner === "w" ? "bg-white" : "bg-black"
+                      } border-4 border-yellow-500 flex items-center justify-center text-5xl shadow-lg`}
+                    >
+                      {gameResult.winner === "w" ? "♔" : "♚"}
+                    </div>
+                    <div className="mt-2 text-lg font-semibold" style={{ color: "var(--dark-square)" }}>
+                      {gameResult.winner === "w" ? "Blancas" : "Negras"}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mb-6 flex flex-col items-center">
+                    <div className="flex">
+                      <div className="w-16 h-16 rounded-full bg-white border-2 border-gray-400 flex items-center justify-center text-4xl mr-3 shadow-md">
+                        ♔
+                      </div>
+                      <div className="w-16 h-16 rounded-full bg-black border-2 border-gray-400 flex items-center justify-center text-4xl text-white shadow-md">
+                        ♚
+                      </div>
+                    </div>
+                    <div className="mt-2 text-lg font-semibold" style={{ color: "var(--dark-square)" }}>
+                      Tablas
+                    </div>
+                  </div>
+                )}
+                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm w-full">
+                  <p className="text-lg text-center" style={{ color: "var(--dark-square)" }}>
+                    {gameResult.message}
+                  </p>
+                </div>
+
+                <div className="mt-6 text-sm text-gray-600 text-center">
+                  Estadísticas de la partida:
+                  <div className="flex justify-center gap-8 mt-2">
+                    <div>
+                      <span className="font-bold">{moveHistory.length}</span> movimientos
+                    </div>
+                    <div>
+                      <span className="font-bold">{capturedPieces.w.length + capturedPieces.b.length}</span> capturas
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
-            <CardFooter className="flex justify-center p-4" style={{ backgroundColor: "var(--light-square)" }}>
+            <CardFooter className="flex justify-center gap-3 p-4" style={{ backgroundColor: "var(--light-square)" }}>
               <Button
                 onClick={resetGame}
                 style={{ backgroundColor: "var(--dark-square)", color: "white" }}
@@ -631,6 +963,41 @@ export default function ChessGame() {
           </Card>
         </div>
       )}
+
+      {/* Botones para probar diferentes finales de partida (solo visible en desarrollo) */}
+      <div className="mt-4">
+        <Button
+          variant="outline"
+          onClick={() => setShowTestButtons(!showTestButtons)}
+          className="text-xs"
+          style={{ borderColor: "var(--dark-square)", color: "var(--dark-square)" }}
+        >
+          {showTestButtons ? "Ocultar pruebas" : "Mostrar pruebas de fin de partida"}
+        </Button>
+
+        {showTestButtons && (
+          <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-2">
+            <Button variant="outline" size="sm" onClick={() => testEndgame("checkmate-white")} className="text-xs">
+              Jaque mate (ganan blancas)
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => testEndgame("checkmate-black")} className="text-xs">
+              Jaque mate (ganan negras)
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => testEndgame("stalemate")} className="text-xs">
+              Tablas por ahogado
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => testEndgame("insufficient")} className="text-xs">
+              Material insuficiente
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => testEndgame("threefold")} className="text-xs">
+              Triple repetición
+            </Button>
+            <Button variant="outline" size="sm" onClick={resetGame} className="text-xs">
+              Reiniciar tablero
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

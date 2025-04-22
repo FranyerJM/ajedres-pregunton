@@ -13,7 +13,8 @@ export default function MathQuestion({ question, onAnswer, boardColors }) {
 
   const handleSubmit = () => {
     if (selectedOption) {
-      const isCorrect = selectedOption.value === question.answer
+      // Verificar si el ID de la opción seleccionada coincide con la respuesta correcta
+      const isCorrect = selectedOption.id === question.answer
       onAnswer(selectedOption, isCorrect)
     }
   }
@@ -21,18 +22,18 @@ export default function MathQuestion({ question, onAnswer, boardColors }) {
   return (
     <Card className="w-full max-w-md bg-white shadow-lg">
       <CardHeader style={{ backgroundColor: "var(--dark-square)", color: "white" }}>
-        <CardTitle className="text-xl text-center">Pregunta Matemática</CardTitle>
+        <CardTitle className="text-xl text-center">Pregunta</CardTitle>
       </CardHeader>
       <CardContent className="p-6" style={{ backgroundColor: "var(--light-square)" }}>
         <p className="text-xl font-bold mb-6 text-center" style={{ color: "var(--dark-square)" }}>
           {question.question}
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {question.options.map((option) => (
             <Button
               key={option.id}
               variant={selectedOption === option ? "default" : "outline"}
-              className={`h-16 text-lg ${selectedOption === option ? "text-white" : "border-2 hover:bg-opacity-10"}`}
+              className={`h-auto py-3 text-base text-left ${selectedOption === option ? "text-white" : "border-2 hover:bg-opacity-10"}`}
               style={
                 selectedOption === option
                   ? { backgroundColor: "var(--dark-square)" }

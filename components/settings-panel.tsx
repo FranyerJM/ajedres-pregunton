@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { X, Trash2 } from "lucide-react"
+import { useState, useRef } from "react"
+import { X, Trash2, Upload, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,12 +21,22 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function SettingsPanel({
   onClose,
   onAddQuestion,
-  onUpdateColors,
+  onAddMultipleQuestions,
   onDeleteQuestion,
+  onUpdateColors,
   onUpdateFrequencySettings,
   currentColors,
   questions,
@@ -75,6 +85,12 @@ export default function SettingsPanel({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [questionToDelete, setQuestionToDelete] = useState(null)
 
+  // Estado para el diálogo de importación CSV
+  const [showImportDialog, setShowImportDialog] = useState(false)
+  const [csvData, setCsvData] = useState("")
+  const [importError, setImportError] = useState("")
+  const fileInputRef = useRef(null)
+
   // Manejar cambios en el formulario de pregunta
   const handleQuestionChange = (e) => {
     setNewQuestion({
@@ -88,7 +104,7 @@ export default function SettingsPanel({
     const updatedOptions = [...newQuestion.options]
     updatedOptions[index] = {
       ...updatedOptions[index],
-      value: Number.parseInt(value) || "",
+      value: value, // Ahora acepta cualquier valor de texto
     }
 
     setNewQuestion({
@@ -125,16 +141,12 @@ export default function SettingsPanel({
       return
     }
 
-    // Encontrar el valor numérico de la opción seleccionada como correcta
-    const correctOption = newQuestion.options.find((opt) => opt.id === newQuestion.correctAnswer)
-    const correctValue = correctOption ? correctOption.value : null
-
     // Crear nueva pregunta con ID único
     const questionToAdd = {
       id: questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 1,
       question: newQuestion.question,
       options: newQuestion.options,
-      correctAnswer: correctValue,
+      correctAnswer: newQuestion.correctAnswer, // Ahora usamos el ID (A, B, C, D)
       difficulty: newQuestion.difficulty,
       feedback: newQuestion.feedback,
     }
@@ -199,6 +211,150 @@ export default function SettingsPanel({
     setShowDeleteAllConfirm(false)
   }
 
+  // Manejar la selección de archivo CSV
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      setCsvData(event.target.result)
+      setImportError("")
+    }
+    reader.onerror = () => {
+      setImportError("Error al leer el archivo")
+    }
+    reader.readAsText(file)
+  }
+
+  // Procesar e importar datos CSV
+  const processCSV = () => {
+    try {
+      if (!csvData.trim()) {
+        setImportError("No hay datos para importar")
+        return
+      }
+
+      // Dividir el CSV en líneas
+      const lines = csvData.split("\n").filter((line) => line.trim() !== "")
+
+      if (lines.length === 0) {
+        setImportError("El archivo no contiene datos válidos")
+        return
+      }
+
+      // Procesar cada línea
+      const newQuestions = []
+      let hasErrors = false
+      let errorMessage = ""
+
+      lines.forEach((line, index) => {
+        try {
+          // Dividir la línea por comas, teniendo en cuenta las comillas
+          const values = line.split(",").map((value) => value.trim())
+
+          if (values.length < 7) {
+            hasErrors = true
+            errorMessage = `Error en la línea ${index + 1}: formato incorrecto. Se esperan al menos 7 columnas.`
+            return
+          }
+
+          const [question, optionA, optionB, optionC, optionD, correctAnswer, difficulty, feedback] = values
+
+          // Validar la respuesta correcta
+          const correctAnswerUpper = correctAnswer.toUpperCase()
+          if (!["A", "B", "C", "D"].includes(correctAnswerUpper)) {
+            hasErrors = true
+            errorMessage = `Error en la línea ${index + 1}: la respuesta correcta debe ser A, B, C o D.`
+            return
+          }
+
+          // Validar la dificultad con las nuevas abreviaturas
+          const difficultyLower = difficulty.toLowerCase()
+          let internalDifficulty = ""
+
+          // Convertir abreviaturas a valores internos
+          if (difficultyLower === "f" || difficultyLower === "facil" || difficultyLower === "fácil") {
+            internalDifficulty = "easy"
+          } else if (difficultyLower === "m" || difficultyLower === "media") {
+            internalDifficulty = "medium"
+          } else if (difficultyLower === "d" || difficultyLower === "dificil" || difficultyLower === "difícil") {
+            internalDifficulty = "hard"
+          } else {
+            hasErrors = true
+            errorMessage = `Error en la línea ${index + 1}: la dificultad debe ser f (fácil), m (media) o d (difícil).`
+            return
+          }
+
+          // Crear la nueva pregunta
+          const options = [
+            { id: "A", value: optionA },
+            { id: "B", value: optionB },
+            { id: "C", value: optionC },
+            { id: "D", value: optionD },
+          ]
+
+          newQuestions.push({
+            id: questions.length + newQuestions.length + 1,
+            question,
+            options,
+            correctAnswer: correctAnswerUpper, // Usar el ID como respuesta correcta
+            difficulty: internalDifficulty,
+            feedback: feedback || "",
+          })
+        } catch (error) {
+          console.error(`Error procesando línea ${index + 1}:`, error)
+          hasErrors = true
+          errorMessage = `Error en la línea ${index + 1}: ${error.message}`
+        }
+      })
+
+      if (hasErrors) {
+        setImportError(errorMessage)
+        return
+      }
+
+      // Añadir todas las preguntas de una vez
+      if (newQuestions.length > 0) {
+        // Usar la función para añadir múltiples preguntas
+        onAddMultipleQuestions(newQuestions)
+
+        // Cerrar el diálogo y limpiar
+        setShowImportDialog(false)
+        setCsvData("")
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""
+        }
+
+        alert(`Se importaron ${newQuestions.length} preguntas correctamente.`)
+      } else {
+        setImportError("No se encontraron preguntas válidas para importar")
+      }
+    } catch (error) {
+      console.error("Error al procesar CSV:", error)
+      setImportError("Error al procesar el archivo CSV. Verifique el formato.")
+    }
+  }
+
+  // Generar un ejemplo de CSV para descargar
+  const generateExampleCSV = () => {
+    const csvContent = [
+      "¿Cuánto es 2 + 2?,4,3,5,6,A,f,La suma de 2 + 2 es 4",
+      "¿Cuál es la capital de Francia?,París,Madrid,Londres,Berlín,A,m,París es la capital de Francia",
+      "¿Cuánto es 15 × 3?,30,45,60,15,B,m,15 × 3 = 45",
+      "¿Qué símbolo representa el oro en la tabla periódica?,Ag,Fe,Au,O,C,d,Au es el símbolo del oro (Aurum en latín)",
+    ].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "ejemplo_preguntas.csv"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <>
       <Card className="w-full max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -229,7 +385,18 @@ export default function SettingsPanel({
             <TabsContent value="questions" className="mt-4">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-medium mb-2">Agregar Nueva Pregunta</h3>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">Agregar Nueva Pregunta</h3>
+                    <Button
+                      onClick={() => setShowImportDialog(true)}
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      style={{ borderColor: "var(--dark-square)", color: "var(--dark-square)" }}
+                    >
+                      <Upload className="h-4 w-4" />
+                      Importar CSV
+                    </Button>
+                  </div>
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="question">Pregunta</Label>
@@ -247,7 +414,7 @@ export default function SettingsPanel({
                           <Label htmlFor={`option-${option.id}`}>Opción {option.id}</Label>
                           <Input
                             id={`option-${option.id}`}
-                            type="number"
+                            type="text" // Cambiado de "number" a "text"
                             value={option.value}
                             onChange={(e) => handleOptionChange(index, e.target.value)}
                             placeholder={`Valor para opción ${option.id}`}
@@ -389,7 +556,7 @@ export default function SettingsPanel({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="absolute right-2 top-2 text-red-500 hover:bg-red-50 hover:text-red-700"
+                            className="absolute right-2 top-8 text-red-500 hover:bg-red-50 hover:text-red-700"
                             onClick={() => confirmDeleteQuestion(q)}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -412,9 +579,9 @@ export default function SettingsPanel({
                             {q.options.map((opt) => (
                               <div
                                 key={opt.id}
-                                className={`p-1 rounded ${opt.value === q.correctAnswer ? "bg-green-100" : ""}`}
+                                className={`p-1 rounded ${opt.id === q.correctAnswer ? "bg-green-100" : ""}`}
                               >
-                                {opt.id}: {opt.value} {opt.value === q.correctAnswer && "✓"}
+                                {opt.id}: {opt.value} {opt.id === q.correctAnswer && "✓"}
                               </div>
                             ))}
                           </div>
@@ -827,6 +994,82 @@ export default function SettingsPanel({
           </Button>
         </CardFooter>
       </Card>
+
+      {/* Diálogo de importación CSV */}
+      <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+        <DialogContent className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Importar Preguntas desde CSV</DialogTitle>
+            <DialogDescription>
+              Sube un archivo CSV con tus preguntas o copia y pega el contenido directamente.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {/* Actualizar la documentación del formato CSV para mostrar dificultad con abreviaturas */}
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+              <p className="font-medium text-sm text-blue-700 mb-2">Formato del CSV:</p>
+              <pre className="bg-blue-100 p-2 rounded text-xs overflow-x-auto whitespace-pre-wrap break-all">
+                Pregunta,Opción A,Opción B,Opción C,Opción D,Respuesta,Dificultad,Retroalimentación
+              </pre>
+              <div className="mt-2 space-y-1 text-xs text-blue-700">
+                <div>
+                  <strong>Pregunta:</strong> Texto de la pregunta
+                </div>
+                <div>
+                  <strong>Opciones A-D:</strong> Opciones de respuesta
+                </div>
+                <div>
+                  <strong>Respuesta:</strong> A, B, C o D
+                </div>
+                <div>
+                  <strong>Dificultad:</strong> f (fácil), m (media) o d (difícil)
+                </div>
+                <div>
+                  <strong>Retroalimentación:</strong> Explicación (opcional)
+                </div>
+              </div>
+              <div className="mt-3 flex justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={generateExampleCSV}
+                  className="flex items-center gap-1 text-xs"
+                >
+                  <Download className="h-3 w-3" />
+                  Descargar ejemplo
+                </Button>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="csv-file">Subir archivo CSV</Label>
+              <Input id="csv-file" type="file" accept=".csv,text/csv" onChange={handleFileSelect} ref={fileInputRef} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="csv-content">O pega el contenido CSV aquí</Label>
+              <Textarea
+                id="csv-content"
+                placeholder="Pega el contenido CSV aquí..."
+                value={csvData}
+                onChange={(e) => setCsvData(e.target.value)}
+                className="min-h-[80px] text-sm w-full"
+              />
+            </div>
+            {importError && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-3 text-red-700 text-sm">{importError}</div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowImportDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={processCSV} style={{ backgroundColor: "var(--dark-square)" }}>
+              Importar Preguntas
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Diálogo de confirmación para eliminar una pregunta */}
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
