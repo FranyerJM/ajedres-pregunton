@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Ajedrez Matemático - Universitas Valentina",
-  description: "Juego de ajedrez con preguntas matemáticas",
+  title: "Ajedrez Pregunton - UJAP",
+  description: "Juego de ajedrez con preguntas personalizadas",
     generator: 'v0.dev'
 }
 
