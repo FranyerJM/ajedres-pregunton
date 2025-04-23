@@ -45,12 +45,21 @@ export default function GameInfo({ playerTurn, moveHistory, capturedPieces, boar
         </CardContent>
       </Card>
 
-      <Card className="border-2 flex-grow" style={{ borderColor: "var(--dark-square)" }}>
+      <Card
+        className="border-2 flex-grow"
+        style={{
+          borderColor: "var(--dark-square)",
+          backgroundColor: "var(--light-square)",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        }}
+      >
         <CardHeader className="py-2 px-4" style={{ backgroundColor: "var(--dark-square)", color: "white" }}>
           <CardTitle className="text-lg">Historial de Movimientos</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <ScrollArea className="h-[200px] p-4" style={{ backgroundColor: "var(--light-square)" }}>
+        <CardContent className="p-0 flex-grow" style={{ height: "200px" }}>
+          <ScrollArea className="h-full w-full p-4">
             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
               {moveHistory.map((move, index) => (
                 <div

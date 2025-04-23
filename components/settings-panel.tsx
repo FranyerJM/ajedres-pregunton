@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { X, Trash2, Upload, Download } from "lucide-react"
+import { X, Trash2, Upload, Download, Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -90,6 +90,12 @@ export default function SettingsPanel({
   const [csvData, setCsvData] = useState("")
   const [importError, setImportError] = useState("")
   const fileInputRef = useRef(null)
+
+  // Nuevo estado para controlar la visibilidad de los detalles de todas las preguntas
+  const [showAllDetails, setShowAllDetails] = useState(false)
+
+  // Nuevo estado para rastrear qué preguntas individuales están expandidas
+  const [expandedQuestions, setExpandedQuestions] = useState({})
 
   // Manejar cambios en el formulario de pregunta
   const handleQuestionChange = (e) => {
@@ -355,6 +361,24 @@ export default function SettingsPanel({
     document.body.removeChild(link)
   }
 
+  // Función para alternar la visibilidad de una pregunta individual
+  const toggleQuestionDetails = (questionId) => {
+    setExpandedQuestions((prev) => ({
+      ...prev,
+      [questionId]: !prev[questionId],
+    }))
+  }
+
+  // Función para determinar si una pregunta debe mostrar detalles
+  const shouldShowQuestionDetails = (questionId) => {
+    // Si la pregunta tiene una configuración específica, usar esa
+    if (expandedQuestions.hasOwnProperty(questionId)) {
+      return expandedQuestions[questionId]
+    }
+    // De lo contrario, usar la configuración global
+    return showAllDetails
+  }
+
   return (
     <>
       <Card className="w-full max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -534,17 +558,37 @@ export default function SettingsPanel({
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-lg font-medium">Preguntas Existentes</h3>
-                    {questions.length > 0 && (
+                    <div className="flex gap-2">
                       <Button
-                        variant="destructive"
+                        variant="outline"
                         size="sm"
-                        onClick={confirmDeleteAllQuestions}
+                        onClick={() => setShowAllDetails(!showAllDetails)}
                         className="flex items-center gap-1"
                       >
-                        <Trash2 className="h-4 w-4" />
-                        Eliminar Todas
+                        {showAllDetails ? (
+                          <>
+                            <EyeOff className="h-4 w-4" />
+                            <span className="hidden sm:inline">Ocultar Detalles</span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="h-4 w-4" />
+                            <span className="hidden sm:inline">Mostrar Detalles</span>
+                          </>
+                        )}
                       </Button>
-                    )}
+                      {questions.length > 0 && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={confirmDeleteAllQuestions}
+                          className="flex items-center gap-1"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          <span className="hidden sm:inline">Eliminar Todas</span>
+                        </Button>
+                      )}
+                    </div>
                   </div>
 
                   {questions.length === 0 ? (
@@ -553,16 +597,28 @@ export default function SettingsPanel({
                     <div className="border rounded-md divide-y">
                       {questions.map((q) => (
                         <div key={q.id} className="p-3 relative">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute right-2 top-8 text-red-500 hover:bg-red-50 hover:text-red-700"
-                            onClick={() => confirmDeleteQuestion(q)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
                           <div className="flex items-center gap-2 mb-1">
                             <p className="font-medium pr-8 flex-grow">{q.question}</p>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-gray-500 hover:bg-gray-50 hover:text-gray-700 h-6 w-6 p-0 mr-1"
+                              onClick={() => toggleQuestionDetails(q.id)}
+                            >
+                              {shouldShowQuestionDetails(q.id) ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-red-500 hover:bg-red-50 hover:text-red-700 h-6 w-6 p-0 mr-1"
+                              onClick={() => confirmDeleteQuestion(q)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                             <span
                               className={`text-xs px-2 py-1 rounded-full ${
                                 q.difficulty === "easy"
@@ -575,20 +631,25 @@ export default function SettingsPanel({
                               {q.difficulty === "easy" ? "Fácil" : q.difficulty === "medium" ? "Media" : "Difícil"}
                             </span>
                           </div>
-                          <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
-                            {q.options.map((opt) => (
-                              <div
-                                key={opt.id}
-                                className={`p-1 rounded ${opt.id === q.correctAnswer ? "bg-green-100" : ""}`}
-                              >
-                                {opt.id}: {opt.value} {opt.id === q.correctAnswer && "✓"}
+
+                          {shouldShowQuestionDetails(q.id) && (
+                            <>
+                              <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                                {q.options.map((opt) => (
+                                  <div
+                                    key={opt.id}
+                                    className={`p-1 rounded ${opt.id === q.correctAnswer ? "bg-green-100" : ""}`}
+                                  >
+                                    {opt.id}: {opt.value} {opt.id === q.correctAnswer && "✓"}
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                          {q.feedback && (
-                            <div className="mt-2 text-sm text-gray-600 italic border-t pt-1">
-                              <span className="font-medium">Retroalimentación:</span> {q.feedback}
-                            </div>
+                              {q.feedback && (
+                                <div className="mt-2 text-sm text-gray-600 italic border-t pt-1">
+                                  <span className="font-medium">Retroalimentación:</span> {q.feedback}
+                                </div>
+                              )}
+                            </>
                           )}
                         </div>
                       ))}

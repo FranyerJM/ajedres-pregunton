@@ -2,159 +2,159 @@
   "questions": [
     {
       "id": 1,
-      "question": "¿Cuál de las siguientes estructuras es un anillo conmutativo con unidad?",
+      "question": "¿Cuál es la capital de Francia?",
       "options": [
-        { "id": "A", "value": "(Z, +, ·)" },
-        { "id": "B", "value": "(Q*, ·)" },
-        { "id": "C", "value": "(N, +, ·)" },
-        { "id": "D", "value": "(R, +)" }
+        { "id": "A", "value": "Londres" },
+        { "id": "B", "value": "París" },
+        { "id": "C", "value": "Madrid" },
+        { "id": "D", "value": "Roma" }
       ],
-      "correctAnswer": "A",
-      "difficulty": "medium",
-      "feedback": "Z con operaciones de suma y multiplicación forma un anillo conmutativo con unidad."
+      "correctAnswer": "B",
+      "difficulty": "easy",
+      "feedback": "París es la capital de Francia desde hace siglos."
     },
     {
       "id": 2,
-      "question": "Sea f: G→H un homomorfismo de grupos, ¿qué indica el Teorema de Isomorfismo de Grupos?",
+      "question": "¿Quién pintó La Mona Lisa?",
       "options": [
-        { "id": "A", "value": "G/ker(f) ≅ im(f)" },
-        { "id": "B", "value": "G ≅ H" },
-        { "id": "C", "value": "ker(f)=e" },
-        { "id": "D", "value": "f es inyectivo" }
+        { "id": "A", "value": "Vincent van Gogh" },
+        { "id": "B", "value": "Pablo Picasso" },
+        { "id": "C", "value": "Leonardo da Vinci" },
+        { "id": "D", "value": "Miguel Ángel" }
       ],
-      "correctAnswer": "A",
-      "difficulty": "hard",
-      "feedback": "El primer teorema de isomorfismo establece G/ker(f) ≅ im(f)."
+      "correctAnswer": "C",
+      "difficulty": "medium",
+      "feedback": "Leonardo da Vinci pintó La Mona Lisa entre 1503 y 1519."
     },
     {
       "id": 3,
-      "question": "¿Cuál es la definición de un grupo?",
+      "question": "¿En qué año llegó Cristóbal Colón a América?",
       "options": [
-        { "id": "A", "value": "Conjunto con una operación asociativa" },
-        { "id": "B", "value": "Conjunto con una operación asociativa, elemento neutro e inversos" },
-        { "id": "C", "value": "Conjunto con una operación conmutativa" },
-        { "id": "D", "value": "Conjunto con dos operaciones que cumplen distributividad" }
+        { "id": "A", "value": "1492" },
+        { "id": "B", "value": "1500" },
+        { "id": "C", "value": "1592" },
+        { "id": "D", "value": "1420" }
       ],
-      "correctAnswer": "B",
-      "difficulty": "easy",
-      "feedback": "Un grupo es un conjunto con una operación binaria que es asociativa, tiene elemento neutro y todo elemento tiene inverso."
+      "correctAnswer": "A",
+      "difficulty": "medium",
+      "feedback": "Cristóbal Colón llegó a América el 12 de octubre de 1492."
     },
     {
       "id": 4,
-      "question": "¿Qué es un cuerpo en álgebra?",
+      "question": "¿Cuál es el planeta más grande del sistema solar?",
       "options": [
-        { "id": "A", "value": "Un anillo donde todo elemento no nulo tiene inverso multiplicativo" },
-        { "id": "B", "value": "Un conjunto con una operación asociativa" },
-        { "id": "C", "value": "Un grupo abeliano" },
-        { "id": "D", "value": "Un anillo sin divisores de cero" }
+        { "id": "A", "value": "Tierra" },
+        { "id": "B", "value": "Marte" },
+        { "id": "C", "value": "Saturno" },
+        { "id": "D", "value": "Júpiter" }
       ],
-      "correctAnswer": "A",
-      "difficulty": "medium",
-      "feedback": "Un cuerpo es un anillo conmutativo con unidad donde todo elemento no nulo tiene inverso multiplicativo."
+      "correctAnswer": "D",
+      "difficulty": "easy",
+      "feedback": "Júpiter es el planeta más grande del sistema solar, con un diámetro de aproximadamente 143,000 km."
     },
     {
       "id": 5,
-      "question": "¿Cuál de los siguientes NO es un grupo?",
+      "question": "¿Cuál es el río más largo del mundo?",
       "options": [
-        { "id": "A", "value": "(Z, +)" },
-        { "id": "B", "value": "(Q*, ·)" },
-        { "id": "C", "value": "(Z, ·)" },
-        { "id": "D", "value": "(R*, ·)" }
+        { "id": "A", "value": "Amazonas" },
+        { "id": "B", "value": "Nilo" },
+        { "id": "C", "value": "Misisipi" },
+        { "id": "D", "value": "Yangtsé" }
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "A",
       "difficulty": "medium",
-      "feedback": "(Z, ·) no es un grupo porque los elementos no tienen inversos multiplicativos (excepto 1 y -1)."
+      "feedback": "El río Amazonas es el más largo del mundo con aproximadamente 6,800 km de longitud."
     },
     {
       "id": 6,
-      "question": "¿Qué es un homomorfismo entre grupos (G,*) y (H,•)?",
+      "question": "¿Cuál es el elemento químico más abundante en el universo?",
       "options": [
-        { "id": "A", "value": "Una función f:G→H tal que f(a*b)=f(a)•f(b)" },
-        { "id": "B", "value": "Una función biyectiva f:G→H" },
-        { "id": "C", "value": "Una función f:G→H tal que f(a*b)=f(b)•f(a)" },
-        { "id": "D", "value": "Una función inyectiva f:G→H" }
+        { "id": "A", "value": "Oxígeno" },
+        { "id": "B", "value": "Hidrógeno" },
+        { "id": "C", "value": "Helio" },
+        { "id": "D", "value": "Carbono" }
       ],
-      "correctAnswer": "A",
+      "correctAnswer": "B",
       "difficulty": "medium",
-      "feedback": "Un homomorfismo es una función que preserva la estructura algebraica: f(a*b)=f(a)•f(b)."
+      "feedback": "El hidrógeno constituye aproximadamente el 75% de toda la materia del universo."
     },
     {
       "id": 7,
-      "question": "¿Qué es un ideal en un anillo R?",
+      "question": "¿Quién escribió 'Don Quijote de la Mancha'?",
       "options": [
-        { "id": "A", "value": "Un subconjunto cerrado bajo la suma" },
-        { "id": "B", "value": "Un subconjunto I tal que para todo a∈I y r∈R, ar∈I y ra∈I" },
-        { "id": "C", "value": "Un subconjunto que contiene al elemento neutro" },
-        { "id": "D", "value": "Un subconjunto que contiene todos los elementos invertibles" }
-      ],
-      "correctAnswer": "B",
-      "difficulty": "hard",
-      "feedback": "Un ideal es un subconjunto I que es un subgrupo aditivo y absorbe productos: para todo a∈I y r∈R, ar∈I y ra∈I."
-    },
-    {
-      "id": 8,
-      "question": "¿Cuál es el orden del grupo cíclico Z₄?",
-      "options": [
-        { "id": "A", "value": "2" },
-        { "id": "B", "value": "3" },
-        { "id": "C", "value": "4" },
-        { "id": "D", "value": "Infinito" }
+        { "id": "A", "value": "Federico García Lorca" },
+        { "id": "B", "value": "Gabriel García Márquez" },
+        { "id": "C", "value": "Miguel de Cervantes" },
+        { "id": "D", "value": "Pablo Neruda" }
       ],
       "correctAnswer": "C",
       "difficulty": "easy",
-      "feedback": "El grupo cíclico Z₄ tiene orden 4, ya que contiene exactamente 4 elementos: {0,1,2,3}."
+      "feedback": "Miguel de Cervantes Saavedra escribió 'Don Quijote de la Mancha', publicada en dos partes (1605 y 1615)."
+    },
+    {
+      "id": 8,
+      "question": "¿Cuál es el país más poblado del mundo?",
+      "options": [
+        { "id": "A", "value": "Estados Unidos" },
+        { "id": "B", "value": "India" },
+        { "id": "C", "value": "China" },
+        { "id": "D", "value": "Rusia" }
+      ],
+      "correctAnswer": "C",
+      "difficulty": "easy",
+      "feedback": "China es el país más poblado con aproximadamente 1,400 millones de habitantes."
     },
     {
       "id": 9,
-      "question": "¿Qué caracteriza a un dominio de integridad?",
+      "question": "¿Cuál es la montaña más alta del mundo?",
       "options": [
-        { "id": "A", "value": "Es un anillo conmutativo con unidad" },
-        { "id": "B", "value": "Es un anillo donde todo elemento tiene inverso" },
-        { "id": "C", "value": "Es un anillo conmutativo con unidad sin divisores de cero" },
-        { "id": "D", "value": "Es un anillo donde todo ideal es principal" }
+        { "id": "A", "value": "K2" },
+        { "id": "B", "value": "Monte Everest" },
+        { "id": "C", "value": "Aconcagua" },
+        { "id": "D", "value": "Monte Kilimanjaro" }
       ],
-      "correctAnswer": "C",
-      "difficulty": "medium",
-      "feedback": "Un dominio de integridad es un anillo conmutativo con unidad donde no hay divisores de cero (si ab=0, entonces a=0 o b=0)."
+      "correctAnswer": "B",
+      "difficulty": "easy",
+      "feedback": "El Monte Everest, con 8,848 metros sobre el nivel del mar, es la montaña más alta del mundo."
     },
     {
       "id": 10,
-      "question": "¿Cuál es el núcleo (kernel) de un homomorfismo de grupos f:G→H?",
+      "question": "¿En qué año terminó la Segunda Guerra Mundial?",
       "options": [
-        { "id": "A", "value": "El conjunto {g∈G | f(g)=e_H}" },
-        { "id": "B", "value": "El conjunto {h∈H | h=f(g) para algún g∈G}" },
-        { "id": "C", "value": "El conjunto {g∈G | f(g)=g}" },
-        { "id": "D", "value": "El conjunto {g∈G | f(g)≠e_H}" }
+        { "id": "A", "value": "1943" },
+        { "id": "B", "value": "1945" },
+        { "id": "C", "value": "1947" },
+        { "id": "D", "value": "1950" }
       ],
-      "correctAnswer": "A",
+      "correctAnswer": "B",
       "difficulty": "medium",
-      "feedback": "El núcleo de un homomorfismo f:G→H es el conjunto de elementos de G que se mapean al elemento identidad de H."
+      "feedback": "La Segunda Guerra Mundial terminó en 1945 con la rendición de Japón tras los bombardeos atómicos."
     },
     {
       "id": 11,
-      "question": "¿Qué es un subgrupo normal?",
+      "question": "¿Cuál es el océano más grande del mundo?",
       "options": [
-        { "id": "A", "value": "Un subgrupo que contiene solo elementos de orden finito" },
-        { "id": "B", "value": "Un subgrupo H de G tal que gH=Hg para todo g∈G" },
-        { "id": "C", "value": "Un subgrupo generado por un solo elemento" },
-        { "id": "D", "value": "Un subgrupo de índice finito" }
+        { "id": "A", "value": "Océano Atlántico" },
+        { "id": "B", "value": "Océano Índico" },
+        { "id": "C", "value": "Océano Pacífico" },
+        { "id": "D", "value": "Océano Ártico" }
       ],
-      "correctAnswer": "B",
-      "difficulty": "hard",
-      "feedback": "Un subgrupo normal H de G es aquel donde los cosets izquierdos y derechos coinciden: gH=Hg para todo g∈G."
+      "correctAnswer": "C",
+      "difficulty": "easy",
+      "feedback": "El Océano Pacífico es el más grande y profundo de los océanos de la Tierra."
     },
     {
       "id": 12,
-      "question": "¿Cuál de los siguientes es un anillo pero no un dominio de integridad?",
+      "question": "¿Quién fue el primer ser humano en pisar la Luna?",
       "options": [
-        { "id": "A", "value": "Z (enteros)" },
-        { "id": "B", "value": "Q (racionales)" },
-        { "id": "C", "value": "Z₆ (enteros módulo 6)" },
-        { "id": "D", "value": "R[x] (polinomios con coeficientes reales)" }
+        { "id": "A", "value": "Yuri Gagarin" },
+        { "id": "B", "value": "Neil Armstrong" },
+        { "id": "C", "value": "Buzz Aldrin" },
+        { "id": "D", "value": "Alan Shepard" }
       ],
-      "correctAnswer": "C",
-      "difficulty": "medium",
-      "feedback": "Z₆ tiene divisores de cero: 2×3=0 en Z₆, pero ni 2 ni 3 son cero, por lo que no es un dominio de integridad."
+      "correctAnswer": "B",
+      "difficulty": "easy",
+      "feedback": "Neil Armstrong fue el primer ser humano en pisar la Luna el 20 de julio de 1969."
     }
   ]
 }

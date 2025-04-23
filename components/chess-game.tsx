@@ -7,180 +7,90 @@ import MathQuestion from "./math-question"
 import GameInfo from "./game-info"
 import SettingsButton from "./settings-button"
 import SettingsPanel from "./settings-panel"
+import StatsPanel from "./stats-panel"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { X, RefreshCw, Flag, HelpCircle } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
-// Actualizar las preguntas predeterminadas con preguntas de estructura algebraica
+// Preguntas predeterminadas como respaldo en caso de que no se pueda cargar el JSON
 const DEFAULT_QUESTIONS = [
   {
     id: 1,
-    question: "¿Cuál de las siguientes estructuras es un anillo conmutativo con unidad?",
+    question: "¿Cuál es la capital de Francia?",
     options: [
-      { id: "A", value: "(Z, +, ·)" },
-      { id: "B", value: "(Q*, ·)" },
-      { id: "C", value: "(N, +, ·)" },
-      { id: "D", value: "(R, +)" },
+      { id: "A", value: "Londres" },
+      { id: "B", value: "París" },
+      { id: "C", value: "Madrid" },
+      { id: "D", value: "Roma" },
     ],
-    correctAnswer: "A",
-    difficulty: "medium",
-    feedback: "Z con operaciones de suma y multiplicación forma un anillo conmutativo con unidad.",
+    correctAnswer: "B",
+    difficulty: "easy",
+    feedback: "París es la capital de Francia desde hace siglos.",
   },
   {
     id: 2,
-    question: "Sea f: G→H un homomorfismo de grupos, ¿qué indica el Teorema de Isomorfismo de Grupos?",
+    question: "¿Quién pintó La Mona Lisa?",
     options: [
-      { id: "A", value: "G/ker(f) ≅ im(f)" },
-      { id: "B", value: "G ≅ H" },
-      { id: "C", value: "ker(f)=e" },
-      { id: "D", value: "f es inyectivo" },
+      { id: "A", value: "Vincent van Gogh" },
+      { id: "B", value: "Pablo Picasso" },
+      { id: "C", value: "Leonardo da Vinci" },
+      { id: "D", value: "Miguel Ángel" },
     ],
-    correctAnswer: "A",
-    difficulty: "hard",
-    feedback: "El primer teorema de isomorfismo establece G/ker(f) ≅ im(f).",
+    correctAnswer: "C",
+    difficulty: "medium",
+    feedback: "Leonardo da Vinci pintó La Mona Lisa entre 1503 y 1519.",
   },
   {
     id: 3,
-    question: "¿Cuál es la definición de un grupo?",
+    question: "¿En qué año llegó Cristóbal Colón a América?",
     options: [
-      { id: "A", value: "Conjunto con una operación asociativa" },
-      { id: "B", value: "Conjunto con una operación asociativa, elemento neutro e inversos" },
-      { id: "C", value: "Conjunto con una operación conmutativa" },
-      { id: "D", value: "Conjunto con dos operaciones que cumplen distributividad" },
+      { id: "A", value: "1492" },
+      { id: "B", value: "1500" },
+      { id: "C", value: "1592" },
+      { id: "D", value: "1420" },
     ],
-    correctAnswer: "B",
-    difficulty: "easy",
-    feedback:
-      "Un grupo es un conjunto con una operación binaria que es asociativa, tiene elemento neutro y todo elemento tiene inverso.",
+    correctAnswer: "A",
+    difficulty: "medium",
+    feedback: "Cristóbal Colón llegó a América el 12 de octubre de 1492.",
   },
   {
     id: 4,
-    question: "¿Qué es un cuerpo en álgebra?",
+    question: "¿Cuál es el planeta más grande del sistema solar?",
     options: [
-      { id: "A", value: "Un anillo donde todo elemento no nulo tiene inverso multiplicativo" },
-      { id: "B", value: "Un conjunto con una operación asociativa" },
-      { id: "C", value: "Un grupo abeliano" },
-      { id: "D", value: "Un anillo sin divisores de cero" },
+      { id: "A", value: "Tierra" },
+      { id: "B", value: "Marte" },
+      { id: "C", value: "Saturno" },
+      { id: "D", value: "Júpiter" },
     ],
-    correctAnswer: "A",
-    difficulty: "medium",
-    feedback: "Un cuerpo es un anillo conmutativo con unidad donde todo elemento no nulo tiene inverso multiplicativo.",
-  },
-  {
-    id: 5,
-    question: "¿Cuál de los siguientes NO es un grupo?",
-    options: [
-      { id: "A", value: "(Z, +)" },
-      { id: "B", value: "(Q*, ·)" },
-      { id: "C", value: "(Z, ·)" },
-      { id: "D", value: "(R*, ·)" },
-    ],
-    correctAnswer: "C",
-    difficulty: "medium",
-    feedback: "(Z, ·) no es un grupo porque los elementos no tienen inversos multiplicativos (excepto 1 y -1).",
-  },
-  {
-    id: 6,
-    question: "¿Qué es un homomorfismo entre grupos (G,*) y (H,•)?",
-    options: [
-      { id: "A", value: "Una función f:G→H tal que f(a*b)=f(a)•f(b)" },
-      { id: "B", value: "Una función biyectiva f:G→H" },
-      { id: "C", value: "Una función f:G→H tal que f(a*b)=f(b)•f(a)" },
-      { id: "D", value: "Una función inyectiva f:G→H" },
-    ],
-    correctAnswer: "A",
-    difficulty: "medium",
-    feedback: "Un homomorfismo es una función que preserva la estructura algebraica: f(a*b)=f(a)•f(b).",
-  },
-  {
-    id: 7,
-    question: "¿Qué es un ideal en un anillo R?",
-    options: [
-      { id: "A", value: "Un subconjunto cerrado bajo la suma" },
-      { id: "B", value: "Un subconjunto I tal que para todo a∈I y r∈R, ar∈I y ra∈I" },
-      { id: "C", value: "Un subconjunto que contiene al elemento neutro" },
-      { id: "D", value: "Un subconjunto que contiene todos los elementos invertibles" },
-    ],
-    correctAnswer: "B",
-    difficulty: "hard",
-    feedback:
-      "Un ideal es un subconjunto I que es un subgrupo aditivo y absorbe productos: para todo a∈I y r∈R, ar∈I y ra∈I.",
-  },
-  {
-    id: 8,
-    question: "¿Cuál es el orden del grupo cíclico Z₄?",
-    options: [
-      { id: "A", value: "2" },
-      { id: "B", value: "3" },
-      { id: "C", value: "4" },
-      { id: "D", value: "Infinito" },
-    ],
-    correctAnswer: "C",
+    correctAnswer: "D",
     difficulty: "easy",
-    feedback: "El grupo cíclico Z₄ tiene orden 4, ya que contiene exactamente 4 elementos: {0,1,2,3}.",
-  },
-  {
-    id: 9,
-    question: "¿Qué caracteriza a un dominio de integridad?",
-    options: [
-      { id: "A", value: "Es un anillo conmutativo con unidad" },
-      { id: "B", value: "Es un anillo donde todo elemento tiene inverso" },
-      { id: "C", value: "Es un anillo conmutativo con unidad sin divisores de cero" },
-      { id: "D", value: "Es un anillo donde todo ideal es principal" },
-    ],
-    correctAnswer: "C",
-    difficulty: "medium",
-    feedback:
-      "Un dominio de integridad es un anillo conmutativo con unidad donde no hay divisores de cero (si ab=0, entonces a=0 o b=0).",
-  },
-  {
-    id: 10,
-    question: "¿Cuál es el núcleo (kernel) de un homomorfismo de grupos f:G→H?",
-    options: [
-      { id: "A", value: "El conjunto {g∈G | f(g)=e_H}" },
-      { id: "B", value: "El conjunto {h∈H | h=f(g) para algún g∈G}" },
-      { id: "C", value: "El conjunto {g∈G | f(g)=g}" },
-      { id: "D", value: "El conjunto {g∈G | f(g)≠e_H}" },
-    ],
-    correctAnswer: "A",
-    difficulty: "medium",
-    feedback:
-      "El núcleo de un homomorfismo f:G→H es el conjunto de elementos de G que se mapean al elemento identidad de H.",
-  },
-  {
-    id: 11,
-    question: "¿Qué es un subgrupo normal?",
-    options: [
-      { id: "A", value: "Un subgrupo que contiene solo elementos de orden finito" },
-      { id: "B", value: "Un subgrupo H de G tal que gH=Hg para todo g∈G" },
-      { id: "C", value: "Un subgrupo generado por un solo elemento" },
-      { id: "D", value: "Un subgrupo de índice finito" },
-    ],
-    correctAnswer: "B",
-    difficulty: "hard",
-    feedback:
-      "Un subgrupo normal H de G es aquel donde los cosets izquierdos y derechos coinciden: gH=Hg para todo g∈G.",
-  },
-  {
-    id: 12,
-    question: "¿Cuál de los siguientes es un anillo pero no un dominio de integridad?",
-    options: [
-      { id: "A", value: "Z (enteros)" },
-      { id: "B", value: "Q (racionales)" },
-      { id: "C", value: "Z₆ (enteros módulo 6)" },
-      { id: "D", value: "R[x] (polinomios con coeficientes reales)" },
-    ],
-    correctAnswer: "C",
-    difficulty: "medium",
-    feedback:
-      "Z₆ tiene divisores de cero: 2×3=0 en Z₆, pero ni 2 ni 3 son cero, por lo que no es un dominio de integridad.",
+    feedback: "Júpiter es el planeta más grande del sistema solar, con un diámetro de aproximadamente 143,000 km.",
   },
 ]
 
 // Configuración predeterminada para la frecuencia de preguntas
 const DEFAULT_FREQUENCY_SETTINGS = {
-  mode: "random", // random, turns, captures, timer
+  mode: "turns", // Cambiado de "random" a "turns"
   probability: 30, // Porcentaje para modo aleatorio
-  turnFrequency: 2, // Cada cuántos turnos preguntar
+  turnFrequency: 1, // Cambiado de 2 a 1 - Preguntar en cada turno
   askWhite: true, // Preguntar a las blancas
   askBlack: true, // Preguntar a las negras
   askOnCapture: true, // Preguntar al capturar
@@ -212,7 +122,7 @@ export default function ChessGame() {
 
   // Estado para configuración y feedback
   const [showSettings, setShowSettings] = useState(false)
-  const [showFeedback, setShowFeedback] = useState(false)
+  const [showFeedback, setShowFeedback] = useState("")
   const [feedbackMessage, setFeedbackMessage] = useState("")
 
   // Estado para guardar información antes de una pregunta
@@ -239,6 +149,15 @@ export default function ChessGame() {
       from: "rgba(205, 32, 32, 0.4)", // Rojo
       to: "rgba(205, 32, 32, 0.4)", // Rojo
     },
+  })
+
+  // Añadir este nuevo estado después de las otras declaraciones de estado
+  const [askedQuestionIds, setAskedQuestionIds] = useState([])
+
+  // Nuevo estado para rastrear estadísticas de preguntas por jugador
+  const [playerStats, setPlayerStats] = useState({
+    w: { correct: 0, incorrect: 0 },
+    b: { correct: 0, incorrect: 0 },
   })
 
   // Cargar preguntas del archivo JSON o usar las predeterminadas si falla
@@ -340,7 +259,7 @@ export default function ChessGame() {
     frequencySettings.pauseTimerDuringQuestion,
   ])
 
-  // Seleccionar una pregunta aleatoria
+  // Reemplazar la función getRandomQuestion con esta nueva implementación
   const getRandomQuestion = () => {
     if (questions.length === 0) return null
 
@@ -354,14 +273,28 @@ export default function ChessGame() {
       }
     }
 
-    const randomIndex = Math.floor(Math.random() * filteredQuestions.length)
-    const question = filteredQuestions[randomIndex]
+    // Filtrar las preguntas que aún no se han mostrado en este ciclo
+    let availableQuestions = filteredQuestions.filter((q) => !askedQuestionIds.includes(q.id))
+
+    // Si todas las preguntas ya se han mostrado, reiniciar el ciclo
+    if (availableQuestions.length === 0) {
+      console.log("Todas las preguntas han sido mostradas. Reiniciando ciclo...")
+      setAskedQuestionIds([])
+      availableQuestions = filteredQuestions
+    }
+
+    // Seleccionar una pregunta aleatoria de las disponibles
+    const randomIndex = Math.floor(Math.random() * availableQuestions.length)
+    const question = availableQuestions[randomIndex]
+
+    // Registrar esta pregunta como mostrada
+    setAskedQuestionIds((prev) => [...prev, question.id])
 
     return {
       question: question.question,
       options: question.options,
-      answer: question.correctAnswer, // Ahora esto es el ID (A, B, C, D)
-      feedback: question.feedback, // Añadir retroalimentación
+      answer: question.correctAnswer,
+      feedback: question.feedback,
     }
   }
 
@@ -519,6 +452,7 @@ export default function ChessGame() {
             moveHistory: updatedMoveHistory,
             lastMove: move,
             capturedPieces: JSON.parse(JSON.stringify(capturedPieces)), // Copia profunda del estado actual de piezas capturadas
+            playerColor: move.color, // Guardar el color del jugador que está respondiendo
           })
 
           setCurrentQuestion(randomQuestion)
@@ -540,8 +474,20 @@ export default function ChessGame() {
     }
   }
 
-  // Manejar la respuesta a la pregunta
+  // Actualizar la función handleAnswer para registrar estadísticas
   const handleAnswer = (selectedOption, isCorrect) => {
+    // Obtener el color del jugador que está respondiendo
+    const playerColor = lastMoveInfo ? lastMoveInfo.playerColor : game.turn()
+
+    // Actualizar estadísticas del jugador
+    setPlayerStats((prevStats) => ({
+      ...prevStats,
+      [playerColor]: {
+        correct: prevStats[playerColor].correct + (isCorrect ? 1 : 0),
+        incorrect: prevStats[playerColor].incorrect + (isCorrect ? 0 : 1),
+      },
+    }))
+
     if (!isCorrect && lastMoveInfo && frequencySettings.loseOnWrongAnswer) {
       try {
         // Si la respuesta es incorrecta:
@@ -668,7 +614,7 @@ export default function ChessGame() {
     console.log("Configuración de frecuencia actualizada:", newSettings)
   }
 
-  // Reiniciar el juego
+  // Modificar la función resetGame para reiniciar también el registro de preguntas mostradas y estadísticas
   const resetGame = () => {
     const newGame = new Chess()
     setGame(newGame)
@@ -681,6 +627,13 @@ export default function ChessGame() {
       title: "",
       message: "",
       winner: "",
+    })
+    // Reiniciar el registro de preguntas mostradas
+    setAskedQuestionIds([])
+    // Reiniciar estadísticas de jugadores
+    setPlayerStats({
+      w: { correct: 0, incorrect: 0 },
+      b: { correct: 0, incorrect: 0 },
     })
 
     // Reiniciar el temporizador si está en modo temporizador
@@ -807,6 +760,36 @@ export default function ChessGame() {
   // Estado para mostrar/ocultar los botones de prueba
   const [showTestButtons, setShowTestButtons] = useState(false)
 
+  // Estados para los nuevos diálogos
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [showSurrenderConfirm, setShowSurrenderConfirm] = useState(false)
+  const [showManual, setShowManual] = useState(false)
+
+  // Función para manejar la rendición
+  const handleSurrender = () => {
+    // Determinar quién gana basado en quién se rinde
+    const currentPlayer = game.turn()
+    const winner = currentPlayer === "w" ? "b" : "w"
+    const winnerName = winner === "w" ? "Blancas" : "Negras"
+    const loserName = winner === "w" ? "Negras" : "Blancas"
+
+    setGameResult({
+      title: `¡${winnerName} ganan la partida!`,
+      message: `Victoria por rendición. ${loserName} se han rendido.`,
+      winner: winner,
+    })
+
+    setGameOver(true)
+    setShowSurrenderConfirm(false)
+
+    // Detener el temporizador si está activo
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+      setTimerActive(false)
+    }
+  }
+
   // Añadir un useEffect para inicializar las variables CSS al cargar el componente
   useEffect(() => {
     // Inicializar las variables CSS con los colores por defecto
@@ -843,6 +826,9 @@ export default function ChessGame() {
               customLightSquareStyle={{ backgroundColor: "var(--light-square)" }}
             />
           </div>
+
+          {/* Añadir el panel de estadísticas debajo del tablero */}
+          <StatsPanel playerStats={playerStats} boardColors={boardColors} />
         </div>
         <div className="md:col-span-1">
           <GameInfo
@@ -898,8 +884,20 @@ export default function ChessGame() {
                   gameResult.winner === "w" ? "white" : gameResult.winner === "b" ? "black" : "var(--dark-square)",
                 color: gameResult.winner === "w" ? "black" : "white",
               }}
-              className="border-b-2 border-gray-300"
+              className="border-b-2 border-gray-300 relative"
             >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-2 text-white hover:bg-opacity-20"
+                style={{
+                  backgroundColor: "transparent",
+                  color: gameResult.winner === "w" ? "black" : "white",
+                }}
+                onClick={() => setGameOver(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
               <CardTitle className="text-2xl text-center font-bold">{gameResult.title}</CardTitle>
             </CardHeader>
             <CardContent className="p-6" style={{ backgroundColor: "var(--light-square)" }}>
@@ -953,6 +951,14 @@ export default function ChessGame() {
             </CardContent>
             <CardFooter className="flex justify-center gap-3 p-4" style={{ backgroundColor: "var(--light-square)" }}>
               <Button
+                variant="outline"
+                onClick={() => setGameOver(false)}
+                style={{ borderColor: "var(--dark-square)", color: "var(--dark-square)" }}
+                className="px-8"
+              >
+                Cerrar
+              </Button>
+              <Button
                 onClick={resetGame}
                 style={{ backgroundColor: "var(--dark-square)", color: "white" }}
                 className="hover:opacity-90 px-8"
@@ -964,40 +970,231 @@ export default function ChessGame() {
         </div>
       )}
 
-      {/* Botones para probar diferentes finales de partida (solo visible en desarrollo) */}
-      <div className="mt-4">
+      {/* Botones principales de juego */}
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2">
         <Button
           variant="outline"
-          onClick={() => setShowTestButtons(!showTestButtons)}
-          className="text-xs"
+          onClick={() => setShowResetConfirm(true)}
+          className="flex items-center justify-center gap-2"
           style={{ borderColor: "var(--dark-square)", color: "var(--dark-square)" }}
         >
-          {showTestButtons ? "Ocultar pruebas" : "Mostrar pruebas de fin de partida"}
+          <RefreshCw className="h-4 w-4" />
+          Reiniciar Partida
         </Button>
 
-        {showTestButtons && (
-          <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-2">
-            <Button variant="outline" size="sm" onClick={() => testEndgame("checkmate-white")} className="text-xs">
-              Jaque mate (ganan blancas)
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => testEndgame("checkmate-black")} className="text-xs">
-              Jaque mate (ganan negras)
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => testEndgame("stalemate")} className="text-xs">
-              Tablas por ahogado
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => testEndgame("insufficient")} className="text-xs">
-              Material insuficiente
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => testEndgame("threefold")} className="text-xs">
-              Triple repetición
-            </Button>
-            <Button variant="outline" size="sm" onClick={resetGame} className="text-xs">
-              Reiniciar tablero
-            </Button>
-          </div>
-        )}
+        <Button
+          variant="outline"
+          onClick={() => setShowSurrenderConfirm(true)}
+          className="flex items-center justify-center gap-2"
+          style={{ borderColor: "var(--dark-square)", color: "var(--dark-square)" }}
+        >
+          <Flag className="h-4 w-4" />
+          Rendirse
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() => setShowManual(true)}
+          className="flex items-center justify-center gap-2"
+          style={{ borderColor: "var(--dark-square)", color: "var(--dark-square)" }}
+        >
+          <HelpCircle className="h-4 w-4" />
+          Manual de Usuario
+        </Button>
       </div>
+
+      {/* Diálogo de confirmación para reiniciar partida */}
+      <AlertDialog open={showResetConfirm} onOpenChange={setShowResetConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Reiniciar la partida?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción reiniciará el tablero y todas las estadísticas. ¿Estás seguro?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={resetGame} className="bg-blue-600 hover:bg-blue-700">
+              Reiniciar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Diálogo de confirmación para rendirse */}
+      <AlertDialog open={showSurrenderConfirm} onOpenChange={setShowSurrenderConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro que deseas rendirte?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Si te rindes, el otro jugador ganará la partida automáticamente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSurrender} className="bg-red-600 hover:bg-red-700">
+              Rendirse
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Modal del manual de usuario */}
+      <Dialog open={showManual} onOpenChange={setShowManual}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold" style={{ color: "var(--dark-square)" }}>
+              Manual de Usuario - Ajedrez Preguntón
+            </DialogTitle>
+            <DialogDescription>Guía completa para entender y jugar al Ajedrez Preguntón</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Introducción
+              </h3>
+              <p className="text-gray-700">
+                Bienvenido al Ajedrez Preguntón, un juego educativo que combina el ajedrez tradicional con preguntas de
+                conocimiento general. Este juego está diseñado para mejorar tus habilidades de ajedrez mientras pones a
+                prueba tus conocimientos.
+              </p>
+              <p className="text-gray-700">
+                El juego fue desarrollado por Franyer Marín y Santhiago Méndez, estudiantes de la Universidad José Antonio Páez, como parte de la materia de Estructuras Discretas bajo la supervisión de la instructora Susan León. Para obtener más información sobre el desarrollo del juego, acceder al repositorio de GitHub para realizar modificaciones o enviar sugerencias, puedes contactar a:
+
+                franyerjmarin@gmail.com / josuechavezzz@gmail.com
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Cómo Jugar
+              </h3>
+              <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                <li>El juego sigue las reglas estándar del ajedrez, con turnos alternos entre blancas y negras.</li>
+                <li>
+                  Después de realizar un movimiento, dependiendo de la configuración, se puede presentar una pregunta.
+                </li>
+                <li>Si respondes correctamente, tu movimiento se mantiene y continúa el juego.</li>
+                <li>Si respondes incorrectamente, tu movimiento se revierte y el turno pasa al oponente.</li>
+                <li>El objetivo es dar jaque mate al rey oponente, como en el ajedrez tradicional.</li>
+              </ol>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Configuración del Juego
+              </h3>
+              <p className="text-gray-700 mb-2">
+                Puedes personalizar varios aspectos del juego a través del botón de Configuración:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                <li>
+                  <span className="font-medium">Preguntas:</span> Añadir, editar o eliminar preguntas.
+                </li>
+                <li>
+                  <span className="font-medium">Frecuencia:</span> Configurar cuándo aparecen las preguntas (por turnos,
+                  al capturar, etc.).
+                </li>
+                <li>
+                  <span className="font-medium">Apariencia:</span> Cambiar los colores del tablero.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Modos de Preguntas
+              </h3>
+              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                <li>
+                  <span className="font-medium">Aleatorio:</span> Las preguntas aparecen con una probabilidad
+                  configurable.
+                </li>
+                <li>
+                  <span className="font-medium">Por turnos:</span> Las preguntas aparecen cada cierto número de turnos.
+                </li>
+                <li>
+                  <span className="font-medium">Al capturar:</span> Las preguntas aparecen cuando se captura una pieza.
+                </li>
+                <li>
+                  <span className="font-medium">Por tiempo:</span> Las preguntas aparecen en intervalos de tiempo
+                  regulares.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Estadísticas
+              </h3>
+              <p className="text-gray-700">
+                El panel de estadísticas muestra el rendimiento de cada jugador con las preguntas:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                <li>Total de preguntas respondidas</li>
+                <li>Número de respuestas correctas e incorrectas</li>
+                <li>Precisión de acierto (porcentaje)</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Importación de Preguntas
+              </h3>
+              <p className="text-gray-700">Puedes importar preguntas desde un archivo CSV con el siguiente formato:</p>
+              <pre className="bg-gray-100 p-2 rounded text-xs overflow-x-auto">
+                Pregunta,Opción A,Opción B,Opción C,Opción D,Respuesta,Dificultad,Retroalimentación
+              </pre>
+              <p className="text-gray-700 mt-2">
+                Donde la respuesta debe ser A, B, C o D, y la dificultad puede ser f (fácil), m (media) o d (difícil).
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Controles Principales
+              </h3>
+              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                <li>
+                  <span className="font-medium">Reiniciar Partida:</span> Comienza una nueva partida desde cero.
+                </li>
+                <li>
+                  <span className="font-medium">Rendirse:</span> Termina la partida actual, dando la victoria al
+                  oponente.
+                </li>
+                <li>
+                  <span className="font-medium">Manual de Usuario:</span> Muestra esta guía de ayuda.
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--dark-square)" }}>
+                Fin del Juego
+              </h3>
+              <p className="text-gray-700">La partida puede terminar de varias formas:</p>
+              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                <li>Jaque mate (victoria)</li>
+                <li>Ahogado (tablas)</li>
+                <li>Material insuficiente (tablas)</li>
+                <li>Triple repetición (tablas)</li>
+                <li>Regla de 50 movimientos (tablas)</li>
+                <li>Rendición (victoria para el oponente)</li>
+              </ul>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              onClick={() => setShowManual(false)}
+              style={{ backgroundColor: "var(--dark-square)", color: "white" }}
+            >
+              Cerrar Manual
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
